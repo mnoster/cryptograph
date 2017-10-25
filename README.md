@@ -28,6 +28,8 @@ Detailed comments in the code, particularly graph.js.
 
 ##### Once downloaded just enable it while you use the page. Sorry for the inconvience. 
 
+Site is hosted on S3: http://metax.cryptograph.s3-website-us-west-2.amazonaws.com/ 
+
 #### Enjoy!
 
 
