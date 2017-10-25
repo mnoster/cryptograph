@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CryptoGraph</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="home.css" type="text/css" rel="stylesheet">
+</head>
+<body id="cryptoGraph" ng-app="cryptoGraph">
+<div ng-controller="cryptoGraphController as cgc">
+    <div ng-class="{'dark' : cgc.lightswitch}">
+        <header>
+            <div ng-class="{'nav-dark' : cgc.lightswitch}" class="top-nav">Crypto Graph</div>
+        </header>
+        <span class="light-switch" ng-class="{'red' : cgc.lightswitch}" ng-click="cgc.lightswitch = !cgc.lightswitch">O</span>
+        <div class="container content-container">
+            <div ngInit="getCoins()"></div>
+            <div class="container-fluid main-contain">
+                <div class="row">
+                    <!--<div class="col-xs-12">-->
+                    <div class="col-xs-12" ng-init="cgc.getCoinList();">
+                        <h1 id="title">Crypto Charts</h1>
+                        <hr/>
+                        <p class="info">This interface allows you to view Crypto Coin price history</p>
+                        <select name="coin" ng-init="cgc.coinType" ng-model="cgc.coinType">
+                            <option value="" disabled>---Select Coin---</option> <!-- not selected / blank option -->
+                            <option ng-repeat="coin in cgc.coins" value="{{coin}}">{{coin}}</option>
+                            <!-- interpolation -->
+                        </select>
+                        <select name="interval" ng-model="cgc.interval">
+                            <option value="" disabled>---Select Date Interval---</option>
+                            <option ng-repeat="interval in cgc.intervals track by $index" value="{{interval}}">{{interval}}</option>
+                        </select>
+                        <br><br>
+                        start date: <input ng-init="cgc.startDate" ng-model="cgc.startDate" id="start-date" type="date">
+                        <!--&nbsp; end date: <input id="end-date" type="date" ng-model="cgc.endDate">-->
+
+                        <br/><br/>
+
+                        <button class="btn btn-info send-btn" onclick="reset()" ng-click="cgc.getCoinDataByNameOrInterval(cgc.coinType,cgc.interval,cgc.startDate)">
+                            send
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="graphArea"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en" target="_blank">Download CORS Chrome Extension</a>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="graph.js"></script>
+<script>
+    //reset
+    function reset(){
+        var g = document.getElementById("graphArea");
+        g.innerHTML = '';
+    }
+</script>
+</body>
+</html>
