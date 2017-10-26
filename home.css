@@ -3,7 +3,7 @@
     margin:0;
     font-family: 'Open Sans', sans-serif;
 }
-.content-container{  min-height: 90vh;  }
+.content-container{  min-height: 100vh;  }
 .dark{
     background: black;
     color: #5bc0de;

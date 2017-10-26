@@ -49,10 +49,12 @@ app.controller("cryptoGraphController", function ($http, $q, $log, $scope, getCo
     self.getCoinDataByNameOrInterval = function (coinType, interval,startDate) {
         console.log("Get Coin Data By Name Or Interval: ", coinType, " " ,interval, " ", startDate);
         var d = Date.parse(startDate)/1000 ;
+        // Default limit to 1 day 24 hours
         var n = 24;
         if(interval == "week") n = 7;
         else if(interval=="month") n = 30;
         else if( interval == "year") n = 365;
+
         if (coinType) {
             // Similar structure to the previous method, except the success callback in this function iterates through the response data
             // And builds up the graph data array with objects of graph properties
@@ -92,19 +94,23 @@ app.factory("getCoinData", function ($http, $q) {
         callApi: function (coinType, interval, startDate,limit) {
             // init promise by deferring, later we will resolve or reject based on response
             var defer = $q.defer();
-
+            let devURL = "http://localhost:7788";
+            let timestamp  = startDate ? "&toTs="+ startDate : '';
             // These are the various endpoints we need to operate the requests
-            var url = {
-                byCoinTypeAndDay : "https://min-api.cryptocompare.com/data/histoday?fsym="+coinType+"&limit="+limit+"&tsym=USD&toTs="+startDate+"&e=CCCAGG",
-                byCoinTypeAndHour : "https://min-api.cryptocompare.com/data/histhour?fsym="+coinType+"&limit=24&tsym=USD&toTs="+startDate+"&e=CCCAGG",
-                coinList: "https://www.cryptocompare.com/api/data/coinlist?sign=true"
+            var endpoints = {
+                byCoinTypeAndDay : "https://min-api.cryptocompare.com/data/histoday?fsym="+coinType+"&limit="+limit+"&tsym=USD&e=CCCAGG" + timestamp,
+                byCoinTypeAndHour : "https://min-api.cryptocompare.com/data/histohour?fsym="+coinType+"&limit="+limit+"&tsym=USD&e=CCCAGG" + timestamp,
+                coinList: "https://cryptocompare.com/api/data/coinlist?sign=true"
             };
             // There is some terenery logic below to determine which URl to use in the request
+            url =  !coinType && !interval ? "coinList" : coinType && interval && limit != 24 ? "byCoinTypeAndDay" : "byCoinTypeAndHour";
+            var data = {url:endpoints[url]};
+            
             $http({
-                url: !coinType && !interval ? url.coinList : coinType && interval && limit ? url.byCoinTypeAndDay : url.byCoinTypeAndHour ,
+                url: devURL + "/crypto/" + url ,
                 dataType: 'json',
-                crossDomain : true,
-                method: 'GET'
+                method: 'POST',
+                data: JSON.stringify(data)
             }).then(function success(response) {
                 console.warn("API connect success: ", response);
                 defer.resolve(response)
