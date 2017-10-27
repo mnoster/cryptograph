@@ -4,6 +4,8 @@ let router = express.Router();
 let axios = require('axios');
 
 
+// Using Body parser because it helps formt incoming JSON requests
+
 const bodyParser = require('body-parser');
 
 router.use(bodyParser.urlencoded({
@@ -12,6 +14,8 @@ router.use(bodyParser.urlencoded({
 
 router.use(bodyParser.json());
 
+
+// Define various route variables 
 
 const byCoinTypeAndDay = 'byCoinTypeAndDay';
 const byCoinTypeAndHour = 'byCoinTypeAndHour';
@@ -48,6 +52,9 @@ router.post("/crypto/" + byCoinTypeAndHour, (req,res) => {
     get_data(url,res)
 });
 
+
+// Here is the request to the Cryptocompare API
+// Utilizes axios request library, which is promise based.
 
 let get_data = (url, res) => {
     axios.get(url)
