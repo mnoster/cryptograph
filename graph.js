@@ -94,7 +94,7 @@ app.factory("getCoinData", function ($http, $q) {
         callApi: function (coinType, interval, startDate,limit) {
             // init promise by deferring, later we will resolve or reject based on response
             var defer = $q.defer();
-            let devURL = "http://localhost:7788";
+            let URL = "http://34.208.253.193";
             let timestamp  = startDate ? "&toTs="+ startDate : '';
             // These are the various endpoints we need to operate the requests
             var endpoints = {
@@ -107,7 +107,7 @@ app.factory("getCoinData", function ($http, $q) {
             var data = {url:endpoints[url]};
             
             $http({
-                url: devURL + "/crypto/" + url ,
+                url: URL + "/crypto/" + url ,
                 dataType: 'json',
                 method: 'POST',
                 data: JSON.stringify(data)
